@@ -1,5 +1,6 @@
 numpy
-flask
+Flask
 tensorflow
+keras
 transformers
 Sastrawi

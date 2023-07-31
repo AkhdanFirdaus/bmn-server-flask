@@ -1,3 +1,5 @@
+import numpy as np
+
 class Process():
     def __init__(self, model):
         self.model = model
