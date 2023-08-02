@@ -1,8 +1,16 @@
 import numpy as np
+import tensorflow as tf
+from transformers import TFBertModel
+
+model_path = 'klasifikasi.h5'
 
 class Process():
-    def __init__(self, model):
-        self.model = model
+    def __init__(self):
+        self.model = tf.keras.models.load_model(
+            model_path,
+            custom_objects={'TFBertModel': TFBertModel},
+            compile=False
+        )
         self.threshold = 0.5
 
     def rounded_predictions(self, inputs):
@@ -15,9 +23,3 @@ class Process():
     def predict(self, inputs):
         predictions = self.model.predict(inputs)
         return predictions
-        # return {
-        #     'data': {
-        #         'severity': NULL,
-        #         'results': [],
-        #     }
-        # }

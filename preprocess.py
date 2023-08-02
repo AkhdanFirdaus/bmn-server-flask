@@ -1,12 +1,15 @@
 import tensorflow as tf
 import numpy as np
+from transformers import BertTokenizer
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-class Preprocessing():
-    def __init__(self, stemmer, stopword, tokenizer, max_len=128):
-        self.stemmer = stemmer
-        self.stopword = stopword
-        self.tokenizer = tokenizer
-        self.max_len = max_len
+class Preprocess():
+    def __init__(self):
+        self.stemmer = StemmerFactory().create_stemmer()
+        self.stopword = StopWordRemoverFactory().create_stop_word_remover()
+        self.tokenizer = BertTokenizer.from_pretrained('indobenchmark/indobert-base-p1')
+        self.max_len = 128
 
     def casefolding(self, val):
         return str(val).lower()
