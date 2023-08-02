@@ -4,3 +4,4 @@ tensorflow
 keras
 transformers
 Sastrawi
+gunicorn
