@@ -12,10 +12,12 @@ class Process():
     def measure_severity(self, inputs, labels):
         return {}
 
-    def predict(self, inputs, labels):
-        return {
-            'data': {
-                'severity': NULL,
-                'results': [],
-            }
-        }
+    def predict(self, inputs):
+        predictions = self.model.predict(inputs)
+        return predictions
+        # return {
+        #     'data': {
+        #         'severity': NULL,
+        #         'results': [],
+        #     }
+        # }

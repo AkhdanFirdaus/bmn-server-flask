@@ -44,6 +44,6 @@ class Preprocessing():
             'attention_mask': tf.convert_to_tensor(np.asarray(attention_mask).squeeze(), dtype=tf.int32)
         }
 
-    def preprocess_get_token(self, sentences, len=20):
+    def preprocess_get_token(self, sentences, display_len=20):
         tokenized = self.preprocessing(sentences)
-        return self.tokenizer.convert_ids_to_tokens(tokenized['input_ids'][:len])
+        return [self.tokenizer.convert_ids_to_tokens(tokenized['input_ids'][i][:display_len]) for i in range(len(sentences))]
