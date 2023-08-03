@@ -4,11 +4,13 @@ from transformers import BertTokenizer
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
+BERT_NAME = 'indobenchmark/indobert-lite-base-p1'
+
 class Preprocess():
     def __init__(self):
         self.stemmer = StemmerFactory().create_stemmer()
         self.stopword = StopWordRemoverFactory().create_stop_word_remover()
-        self.tokenizer = BertTokenizer.from_pretrained('indobenchmark/indobert-base-p1')
+        self.tokenizer = BertTokenizer.from_pretrained(BERT_NAME)
         self.max_len = 128
 
     def casefolding(self, val):
