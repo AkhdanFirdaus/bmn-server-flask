@@ -4,26 +4,45 @@ from transformers import TFBertModel
 from preprocess import Preprocess
 
 BERT_NAME = 'indobenchmark/indobert-lite-base-p1'
-MODEL_PATH = 'model_3.keras'
+MODEL_CLASSIFICATION_PATH = './model/classification_model.keras'
+MODEL_PREDICT_SPAREPART_PATH = './model/suku_cadang_model.keras'
+MODEL_PREDICT_PRICE_PATH = './model/biaya_model.keras'
+
 
 class Process():
     def __init__(self):
-        self.model = tf.keras.models.load_model(
-            MODEL_PATH,
-            custom_objects={'TFBertModel': TFBertModel.from_pretrained(BERT_NAME)},
-            compile=False
+        self.classification_model = tf.keras.models.load_model(
+            MODEL_CLASSIFICATION_PATH,
+            custom_objects={
+                'TFBertModel': TFBertModel.from_pretrained(BERT_NAME)},
+        )
+        self.predict_sparepart_model = tf.keras.models.load_model(
+            MODEL_PREDICT_SPAREPART_PATH,
+        )
+        self.predict_price_model = tf.keras.models.load_model(
+            MODEL_PREDICT_PRICE_PATH,
         )
         self.preprocess = Preprocess()
         self.threshold = 0.5
 
     def rounded_predictions(self, inputs):
         tokenized = self.preprocess.preprocessing(inputs)
-        predictions = self.model.predict(tokenized)
+        predictions = self.classification_model.predict(tokenized)
         return np.where(predictions > self.threshold, 1, 0).tolist()
+
+    def sparepart_predictions(self, inputs):
+        predictions = self.rounded_predictions(inputs)
+        predictions = self.predict_sparepart_model.predict(predictions)
+        return predictions.tolist()
+
+    def price_predictions(self, inputs):
+        predictions = self.rounded_predictions(inputs)
+        predictions = self.predict_price_model.predict(predictions)
+        return predictions.tolist()
 
     def predict(self, labels, inputs):
         predictions = self.rounded_predictions(inputs)
-        
+
         outputs = []
 
         for i in range(len(predictions)):
